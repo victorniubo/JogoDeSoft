@@ -1,6 +1,17 @@
 '''
 O código foi feito com base no tutorial de pygame do canal Kids Can Code do youtube,
 muitas de suas "features" foram tiradas de lá porém houveram mudanças e implementações.
+Entre elas:
+- Movimentaçao no eixo y
+- Inimigos que atiram e tem movimentaçao aleatória
+- Diferentes tipos de powerup's
+- Batalha com Boss
+- Mecanica de batalha com boss diferente da normal
+- Escolha de naves diferentes com atributos diferentes
+- Meteoros com vida baseada no tamanho
+- Tipos diferentes de blaster para cada nave
+- Telas diferentes alem da inicial e de game over  
+
 
 Autores: Giovanni Santos, Victor Niubó
     
@@ -175,7 +186,7 @@ def draw_lives(surf, x, y, lives, img):
 def show_bg_screen():
     win_snd.stop()
     screen.blit(fundo, fundo_rect)
-    menu_snd.play()
+    menu_snd.play(-1)
     draw_text(screen, 'JOGO INSANO APOCALÍPTICO', 64, WIDTH / 2, HEIGHT / 4)
     draw_text(screen, 'Setas para se movimentar, espaço para atirar', 22, WIDTH / 2, HEIGHT / 2)
     draw_text(screen, 'Pressione espaço para começar', 18, WIDTH / 2, HEIGHT * 3/4)
@@ -1079,6 +1090,8 @@ banana = False
 abobora = False
 while Rodando:
     if Game_over:
+        banana = False
+        abobora = False
         show_bg_screen()
         ship = show_choose_ship_screen()
         menu_snd.stop()
@@ -1114,7 +1127,7 @@ while Rodando:
         ships.add(ship)
         boss = Boss1()
         
-        for e in range(15):
+        for e in range(6):
             n_meteor()
             
         for e in range(2):
@@ -1151,7 +1164,7 @@ while Rodando:
     # Colisão meteoros com tiros
     hits = pg.sprite.groupcollide(meteors, bullets, False, True)
     for hit in hits:
-        if score < 10000:
+        if score < 7500:
             if hit.radius > 40:
                 hit.hitpoints -= 10
                 expl = Explosion(hit.rect.center, 'P')
@@ -1187,8 +1200,8 @@ while Rodando:
                 pups = PowerUp(hit.rect.center)
                 all_sprites.add(pups)
                 powerups.add(pups)
-        if score > 10000:
-            score = 10000
+        if score > 7500:
+            score = 7500
             n_boss1()
 
     # Colisão mobs com tiros
@@ -1198,7 +1211,7 @@ while Rodando:
         expl = Explosion(hit.rect.center, 'P')
         all_sprites.add(expl)
         if hit.hitpoints <= 0:
-            score += 150
+            score += 300
             if score >= 0 and score <= 2500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
@@ -1211,14 +1224,14 @@ while Rodando:
                 hit.kill()
                 expl_death_snd.play()
                 n_mob2()
-            if score > 5000 and score < 10000:
+            if score > 5000 and score < 7500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
                 hit.kill()
                 expl_death_snd.play()
                 n_mob3()
-            if score > 10000:
-                score = 10000
+            if score > 7500:
+                score = 7500
                 n_boss1()
                
     # Colisão nave com PowerUps
@@ -1267,7 +1280,7 @@ while Rodando:
     for hit in hits:
         if ship.power_st == 1:
             ship.hitpoints -= HITPOINTS / 3
-            score += 150
+            score += 300
             if score >= 0 and score <= 2500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
@@ -1280,14 +1293,14 @@ while Rodando:
                 hit.kill()
                 expl_death_snd.play()
                 n_mob2()
-            if score > 5000 and score < 10000:
+            if score > 5000 and score < 7500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
                 hit.kill()
                 expl_death_snd.play()
                 n_mob3()
-            if score > 10000:
-                score = 10000
+            if score > 7500:
+                score = 7500
                 n_boss1()
             if ship.hitpoints <= 0:
                 death_explosion = Explosion(ship.rect.center, 'player')
@@ -1297,7 +1310,7 @@ while Rodando:
                 ship.lives -= 1
                 ship.hitpoints = HITPOINTS
         if ship.power_st >= 2:
-            score += 150
+            score += 300
             if score >= 0 and score <= 2500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
@@ -1310,14 +1323,14 @@ while Rodando:
                 hit.kill()
                 expl_death_snd.play()
                 n_mob2()
-            if score > 5000 and score < 10000:
+            if score > 5000 and score < 7500:
                 death_explosion = Explosion(hit.rect.center, 'player')
                 all_sprites.add(death_explosion)
                 hit.kill()
                 expl_death_snd.play()
                 n_mob3()
-            if score > 10000:
-                score = 10000
+            if score > 7500:
+                score = 7500
                 n_boss1()
             
 
@@ -1338,7 +1351,7 @@ while Rodando:
                 ship.lives -= 1
                 ship.hitpoints = HITPOINTS
         if ship.power_st >= 2:
-            score += 150
+            score += 300
             expl = Explosion(hit.rect.center, 'P')
             all_sprites.add(expl)
             n_meteor()
